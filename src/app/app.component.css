@@ -1,0 +1,8 @@
+.centrado {
+    text-align:center;
+}
+
+.lowercase {
+    text-transform: lowercase;
+    text-align:center;
+  }

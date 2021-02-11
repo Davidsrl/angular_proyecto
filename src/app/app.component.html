@@ -1,0 +1,203 @@
+<div id="animateSlider" class="carousel slide col-md-12" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <div class="col mb-4 pl-0">
+        <div class="card">
+          <nav class="navbar navbar-light bg-light justify-content-between">
+            <b class="navbar-brand headerColor">INVENTARIO AUTOMOTRIZ</b>
+
+
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit" data-toggle="modal"
+              data-target="#usuarioModal">
+              <a>Crear nuevo usuario</a>
+            </button>
+
+          </nav>
+          <div class="card-body">
+            <form action="#" [formGroup]="formulario" novalidate>
+              <div class="form-row">
+                <div class="form-group col-md-3" *ngIf="codigoBoolean">
+                  <label for="codigo">Codigo</label>
+                  <input type="text" id="codigo" onpaste="return true;" class="form-control"
+                    formControlName="codigoProducto" disabled="true" />
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="nombreProducto">Nombre producto</label>
+                  <span class="text-danger">*</span>
+                  <input type="text" id="nombreProducto" onpaste="return true;" class="form-control"
+                    formControlName="nombreProducto" />
+                </div>
+
+                <div class="form-group col-md-2">
+                  <label for="cantidad">Cantidad</label>
+                  <span class="text-danger">*</span>
+
+                  <input type="number" id="cantidad" onpaste="return true;" autocomplete="off" class="form-control"
+                    formControlName="cantidad" />
+
+                </div>
+
+                <div class="form-group col-md-2">
+                  <label for="fechaIngreso">Fecha</label>
+                  <span class="text-danger">*</span>
+                  <input type="date" id="fechaIngreso" onpaste="return true;" autocomplete="off" class="form-control"
+                    formControlName="fechaIngreso" max="{{fechaMaxima | date:'yyyy-MM-dd'}}" required step="1" />
+                </div>
+
+                <div class="form-group col-md-3" *ngIf="nombreUsuarioBoolean">
+                  <label for="nombreUsuario">Nombre usuario</label>
+                  <span class="text-danger">*</span>
+                  <select name="nombreUsuario" id="nombreUsuario" class="form-control" formControlName="nombreUsuario">
+                    <option [ngValue]="item.nombreUsuario" *ngFor="let item of usuarios">{{item.nombreUsuario}}</option>
+                  </select>
+
+                </div>
+
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!--Botones editar limpiar-->
+      <div class="col-sm-13 col-md-12 row justify-content-between mb-4">
+        <div class="col-10 col-sm-2 col-md-2 col-lg-3 col-xl-4 row justify-content-center  pl-2">
+          <button class="btn btn-block btn-dark limpiar" (click)="limpiar()">
+            <i class="fa fa-paint-brush"></i>
+            LIMPIAR
+          </button>
+        </div>
+        <div class="col-12 col-sm-10 col-md-10 col-lg-8 col-xl-8 row justify-content-center p-0"
+          *ngIf="validaGuardar == true">
+          <button id="btnGuardar" class="btn btn-block btn-primary" (click)="guardar()"
+            [disabled]="!this.formulario.valid">
+
+            <i class="fa fa-plus-circle"></i>
+            GUARDAR
+          </button>
+        </div>
+        <div class="col-3 col-sm-10 col-md-10 col-lg-4 col-xl-3 row justify-content-center p-0"
+          *ngIf="validaEditar == true">
+          <button id="btnEditar" class="btn btn-block btn-primary" (click)="editar()">
+
+            <i class="fa fa-pencil"></i>
+            EDITAR
+          </button>
+        </div>
+
+        <div class="col-3 col-sm-10 col-md-10 col-lg-4 col-xl-3 row justify-content-center p-0"
+          *ngIf="validaEliminar == true">
+          <button id="btnEliminar" class="btn btn-block btn-danger" (click)="eliminar()">
+
+            <i class="fa fa-pencil"></i>
+            ELIMINAR
+          </button>
+        </div>
+
+      </div>
+
+
+      <!--Tabla registros producto-->
+      <div class="col pl-0" *ngIf="validaTable">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+              <table class="table table-striped table-fixed table-hover">
+                <thead class="thead-inverse">
+                  <tr class="centrado">
+                    <th scope="col" width="9%">
+                      <label for="codigoTable">CODIGO</label>
+                      <div class="input-group input-group-sm mb-4">
+                        <input type="text" id="codigoTable" onpaste="return true;" re-focus-after-select
+                          autocomplete="off" class="form-control" aria-label="Sizing example input"
+                          aria-describedby="inputGroup-sizing-sm" (input)="filtrarCampos()">
+                      </div>
+                    </th>
+                    <th scope="col" width="26%">
+                      <label for="nombreProductoTable">NOMBRE PRODUCTO</label>
+                      <div class="input-group input-group-sm mb-4">
+                        <input type="text" id="nombreProductoTable" onpaste="return true;" re-focus-after-select
+                          autocomplete="off" class="form-control" aria-label="Sizing example input"
+                          aria-describedby="inputGroup-sizing-sm" (input)="filtrarCampos()">
+                      </div>
+                    </th>
+
+
+                    <th scope="col" width="9%">
+                      <label for="cantidadTable">CANTIDAD</label>
+                      <div class="input-group input-group-sm mb-4">
+                        <input type="text" id="cantidadTable" onpaste="return true;" re-focus-after-select
+                          autocomplete="off" class="form-control" aria-label="Sizing example input"
+                          aria-describedby="inputGroup-sizing-sm" (input)="filtrarCampos()">
+                      </div>
+                    </th>
+
+                    <th scope="col" width="26%">
+                      <label for="nombreUsuarioTable">NOMBRE USUARIO</label>
+                      <div class="input-group input-group-sm mb-4">
+                        <input type="text" id="nombreUsuarioTable" onpaste="return true;" re-focus-after-select
+                          autocomplete="off" class="form-control" aria-label="Sizing example input"
+                          aria-describedby="inputGroup-sizing-sm" (input)="filtrarCampos()">
+                      </div>
+                    </th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let item of lstProductosFilter | paginate: { itemsPerPage: 5, currentPage: page, id: 'paginateProductos' };  let con = index"
+                    (click)="seleccionarProducto(item, $event)" style="cursor: pointer">
+
+                    <td class="text-left text-tab" style="font-size:14px" class="centrado">{{ item.id }}</td>
+                    <td class="text-left text-tab" container="body" style="font-size:14px" class="lowercase">{{
+                      item.nombreProducto }}</td>
+                    <td class="text-left text-tab" container="body" style="font-size:14px" class="centrado">{{
+                      item.cantidad }}</td>
+                    <td class="text-left text-tab" container="body" style="font-size:14px" class="centrado">{{
+                      item.nombreUsuario }}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+              <pagination-controls id="paginateProductos" autoHide="true" class="text-center" (pageChange)="page=$event"
+                autoHide="true" previousLabel="Anterior" nextLabel="Siguiente" style="font-size: 12px; margin: auto;">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!--MODAL-->
+<div class="modal fade" id="usuarioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Crear nuevo usuario</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Nombre usuario:</label>
+            <input type="text" class="form-control" id="nombreUsuarioModal">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+          (click)="guardarUsuario($event)">Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
